@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intrusion Log Dashboard</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; margin: 0; background-color: #f8f9fa; }
+        .container { max-width: 1000px; margin: 20px auto; padding: 20px; background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        h1 { color: #343a40; border-bottom: 2px solid #007bff; padding-bottom: 10px; }
+        p { color: #6c757d; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 12px 15px; border: 1px solid #dee2e6; text-align: left; }
+        th { background-color: #007bff; color: white; }
+        tr:nth-child(even) { background-color: #f8f9fa; }
+        .intrusion { color: #dc3545; font-weight: bold; }
+        .loading { text-align: center; color: #6c757d; font-style: italic; }
+        
+        /* This centers the text in the first and last columns */
+        td:first-child, td:last-child { text-align: center; } 
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Smart Home Intrusion Log</h1>
+        <p>This dashboard pulls all event data directly from your local Ganache blockchain via the Flask API.</p>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Event ID</th>
+                    <th>Device</th>
+                    <th>Timestamp (Readable)</th>
+                    <th>Intrusion Detected</th>
+                    <th>Block #</th>
+                </tr>
+            </thead>
+            <tbody id="logs-table-body">
+                <tr class="loading">
+                    <td colspan="5">Loading logs from blockchain...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const tableBody = document.getElementById('logs-table-body');
+            
+            try {
+                // 1. Call our Flask API endpoint
+                const response = await fetch('/get_logs');
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch logs: ${response.statusText}`);
+                }
+                const logs = await response.json();
+
+                // 2. Clear the "Loading..." message
+                tableBody.innerHTML = ''; 
+
+                if (logs.length === 0) {
+                    tableBody.innerHTML = '<tr class="loading"><td colspan="5">No intrusion events logged yet.</td></tr>';
+                    return;
+                }
+
+                // 3. Populate the table with the log data
+                logs.forEach(log => {
+                    const row = document.createElement('tr');
+                    
+                    const date = new Date(log.timestamp * 1000).toLocaleString();
+                    const intrusionClass = log.intrusion === 'Yes' ? 'intrusion' : '';
+
+                    // This now includes the 'log.blockNum' field
+                    row.innerHTML = `
+                        <td>${log.id}</td>
+                        <td>${log.device}</td>
+                        <td>${date}</td>
+                        <td class="${intrusionClass}">${log.intrusion}</td>
+                        <td>${log.blockNum}</td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+
+            } catch (error) {
+                console.error('Error fetching logs:', error);
+                tableBody.innerHTML = `<tr class="loading"><td colspan="5" style="color: red;">Error loading logs: ${error.message}</td></tr>`;
+            }
+        });
+    </SCriPT>
+</body>
+</html>

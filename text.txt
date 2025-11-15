@@ -1,0 +1,6 @@
+
+curl -Method POST -Uri http://127.0.0.1:5000/log_intrusion -ContentType 'application/json' -Body '{"device": "Living_Room_Camera", "intrusion": 0}'
+
+curl -Method POST -Uri http://127.0.0.1:5000/log_intrusion -ContentType 'application/json' -Body '{"device": "Danmini_Doorbell", "intrusion": 1}'
+
+python scripts/monitor.py
