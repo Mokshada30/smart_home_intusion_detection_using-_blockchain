@@ -1,0 +1,29 @@
+Ignore Python cache
+
+pycache/
+*.py[cod]
+
+Ignore generated data files
+
+data/
+*.csv
+
+Ignore generated ML models
+
+models/
+*.pkl
+
+Ignore generated plots
+
+*.png
+
+Ignore virtual environments
+
+venv/
+.venv/
+env/
+.env
+
+Ignore OS-specific files
+
+.DS_Store
