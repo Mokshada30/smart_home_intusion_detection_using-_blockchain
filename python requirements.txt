@@ -1,0 +1,8 @@
+flask
+web3
+pandas
+scikit-learn
+joblib
+seaborn
+matplotlib
+requests
