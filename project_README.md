@@ -74,6 +74,7 @@ Step 3: Get the Dataset (CRITICAL)
 This repository does not include the data, as the files are several gigabytes in size. You must acquire the dataset and place it in the correct folder.
 
 Download: The project uses the N-BaIoT dataset. You can find it here: UNB N-BaIoT Dataset Page.
+https://www.kaggle.com/datasets/mkashifn/nbaiot-dataset
 
 Unzip: Unzip the main file. You will have a folder containing 89 .csv files for 9 different IoT devices.
 
